@@ -27,7 +27,8 @@ A GitHub Action that extracts and parses semantic versions from tags, refs, or m
 ## Outputs
 
 | Output | Description | Example |
-|--------|-------------|---------|| `found` | Whether a valid version was found | `true` / `false` |
+|--------|-------------|---------|
+| `found` | Whether a valid version was found | `true` / `false` |
 | `source` | The raw input string before any processing | `v1.3.0` || `version` | Full version string | `1.3.0` |
 | `major` | Major version number | `1` |
 | `minor` | Minor version number | `3` |
