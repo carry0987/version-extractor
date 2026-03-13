@@ -1,65 +1,123 @@
-# TS Action Starter
+# Version Extractor
 
-<!-- TODO: Replace with your action's description -->
-
-A GitHub Action that does something useful.
+A GitHub Action that extracts and parses semantic versions from tags, refs, or manual input. Provides the full version string and individual semver components as action outputs.
 
 ## Usage
 
 ```yaml
-- uses: your-org/your-action@v1
+- uses: carry0987/version-extractor@v1
+  id: version
   with:
-    name: 'World'
+    tag: ${{ github.event.release.tag_name }}
+
+- run: echo "Deploying version ${{ steps.version.outputs.version }}"
 ```
 
 ## Inputs
 
-<!-- TODO: Update inputs to match your action.yml -->
-
 | Input | Required | Default | Description |
 |-------|----------|---------|-------------|
-| `name` | Yes | — | TODO: Describe this input |
+| `tag` | No | `''` | Tag to extract version from (e.g. `v1.3.0`). Takes priority over `fallback-ref`. |
+| `fallback-ref` | No | `${{ github.ref_name }}` | Fallback ref name when `tag` is empty |
+| `prefix` | No | `v` | Version prefix to strip |
+| `strict` | No | `false` | Whether to strictly validate semver format |
 
 ## Outputs
 
-<!-- TODO: Update outputs to match your action.yml -->
+| Output | Description | Example |
+|--------|-------------|---------|
+| `version` | Full version string | `1.3.0` |
+| `major` | Major version number | `1` |
+| `minor` | Minor version number | `3` |
+| `patch` | Patch version number | `0` |
+| `prerelease` | Prerelease identifier (if any) | `beta.1` |
+| `is-prerelease` | Whether the version is a prerelease | `true` / `false` |
 
-| Output | Description |
-|--------|-------------|
-| `result` | TODO: Describe this output |
+## Examples
 
-## Development
+### Extract version from a release tag
 
-### Prerequisites
+```yaml
+on:
+  release:
+    types: [published]
 
-- [Node.js](https://nodejs.org/) 24+
-- [pnpm](https://pnpm.io/)
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: carry0987/version-extractor@v1
+        id: version
+        with:
+          tag: ${{ github.event.release.tag_name }}
 
-### Setup
-
-```bash
-pnpm install
+      - run: |
+          echo "Version: ${{ steps.version.outputs.version }}"
+          echo "Major: ${{ steps.version.outputs.major }}"
 ```
 
-### Commands
+### Extract version from a pushed tag
 
-```bash
-pnpm build      # Bundle the action
-pnpm test       # Run tests
-pnpm lint       # Check code style
-pnpm lint:fix   # Auto-fix code style
-pnpm typecheck  # Type check
+```yaml
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: carry0987/version-extractor@v1
+        id: version
+
+      - run: echo "Building ${{ steps.version.outputs.version }}"
 ```
 
-### Release
+### Custom prefix
 
-This template uses [Release Please](https://github.com/googleapis/release-please) for automated releases. Use [Conventional Commits](https://www.conventionalcommits.org/) to trigger version bumps:
+```yaml
+- uses: carry0987/version-extractor@v1
+  id: version
+  with:
+    tag: 'release-2.5.1'
+    prefix: 'release-'
+# outputs.version → 2.5.1
+```
 
-- `feat: ...` — minor version bump
-- `fix: ...` — patch version bump
-- `feat!: ...` or `BREAKING CHANGE:` — major version bump
+### Prerelease detection
 
-Push to `main` and Release Please will create a release PR automatically.
+```yaml
+- uses: carry0987/version-extractor@v1
+  id: version
+  with:
+    tag: 'v3.0.0-beta.1'
+
+- if: steps.version.outputs.is-prerelease == 'true'
+  run: echo "This is a prerelease!"
+```
+
+### Non-strict mode (default)
+
+Non-strict mode uses `semver.coerce` as a fallback, accepting partial versions:
+
+```yaml
+- uses: carry0987/version-extractor@v1
+  with:
+    tag: '1.3'
+# outputs.version → 1.3.0
+```
+
+### Strict mode
+
+Strict mode only accepts valid semver strings:
+
+```yaml
+- uses: carry0987/version-extractor@v1
+  with:
+    tag: '1.3'
+    strict: 'true'
+# ❌ Fails — "1.3" is not valid semver
+```
 
 ## License
 

@@ -1,18 +1,43 @@
-name: My Action
-description: 'TODO: Describe what your action does'
+name: Version Extractor
+description: >
+  Extract and parse a semantic version from a tag, ref, or manual input.
+  Provides the full version string and individual semver components.
 branding:
   icon: 'book'
   color: 'blue'
 
 inputs:
-  name:
-    description: 'TODO: Describe this input'
-    required: true
+  tag:
+    description: 'Tag to extract version from (e.g. v1.3.0). Takes priority over fallback-ref.'
+    required: false
+    default: ''
+  fallback-ref:
+    description: 'Fallback ref name when tag is empty'
+    required: false
+    default: ${{ github.ref_name }}
+  prefix:
+    description: 'Version prefix to strip (e.g. v)'
+    required: false
+    default: 'v'
+  strict:
+    description: 'Whether to strictly validate semver format'
+    required: false
+    default: 'false'
 
 outputs:
-  result:
-    description: 'TODO: Describe this output'
+  version:
+    description: 'Full version string (e.g. 1.3.0)'
+  major:
+    description: 'Major version number'
+  minor:
+    description: 'Minor version number'
+  patch:
+    description: 'Patch version number'
+  prerelease:
+    description: 'Prerelease identifier (if any)'
+  is-prerelease:
+    description: 'Whether the version is a prerelease (true/false)'
 
 runs:
-  using: node20
+  using: node24
   main: dist/index.cjs
