@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/carry0987/version-extractor/compare/v1.3.0...v1.4.0) (2026-03-13)
+
+
+### Features
+
+* add version-number output ([823e7e7](https://github.com/carry0987/version-extractor/commit/823e7e7d09a472f6d5e7f4aa44aed8b9234e3588))
+
 ## [1.3.0](https://github.com/carry0987/version-extractor/compare/v1.2.0...v1.3.0) (2026-03-13)
 
 
