@@ -21,7 +21,7 @@ inputs:
   strict:
     description: 'Whether to strictly validate semver format'
     required: false
-    default: 'false'
+    default: 'true'
   extract-pattern:
     description: 'Regex to extract version from raw input (first capture group is used if present)'
     required: false
