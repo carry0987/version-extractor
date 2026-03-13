@@ -20,7 +20,7 @@ A GitHub Action that extracts and parses semantic versions from tags, refs, or m
 | `tag` | No | `''` | Tag to extract version from (e.g. `v1.3.0`). Takes priority over `fallback-ref`. |
 | `fallback-ref` | No | `${{ github.ref_name }}` | Fallback ref name when `tag` is empty |
 | `prefix` | No | `v` | Version prefix to strip |
-| `strict` | No | `false` | Whether to strictly validate semver format |
+| `strict` | No | `true` | Whether to strictly validate semver format |
 | `extract-pattern` | No | `''` | Regex to extract version from raw input (first capture group is used if present) |
 | `fail-on-error` | No | `true` | Whether to fail the action when version extraction fails |
 
@@ -127,18 +127,7 @@ Set `fail-on-error` to `false` to emit a warning instead of failing the action w
   run: echo "Version ${{ steps.version.outputs.version }}"
 ```
 
-### Non-strict mode (default)
-
-Non-strict mode uses `semver.coerce` as a fallback, accepting partial versions:
-
-```yaml
-- uses: carry0987/version-extractor@v1
-  with:
-    tag: '1.3'
-# outputs.version → 1.3.0
-```
-
-### Strict mode
+### Strict mode (default)
 
 Strict mode only accepts valid semver strings:
 
@@ -146,8 +135,19 @@ Strict mode only accepts valid semver strings:
 - uses: carry0987/version-extractor@v1
   with:
     tag: '1.3'
-    strict: 'true'
 # ❌ Fails — "1.3" is not valid semver
+```
+
+### Non-strict mode
+
+Non-strict mode uses `semver.coerce` as a fallback, accepting partial versions:
+
+```yaml
+- uses: carry0987/version-extractor@v1
+  with:
+    tag: '1.3'
+    strict: 'false'
+# outputs.version → 1.3.0
 ```
 
 ## License
