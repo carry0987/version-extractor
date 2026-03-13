@@ -11,6 +11,8 @@ A GitHub Action that extracts and parses semantic versions from tags, refs, or m
     tag: ${{ github.event.release.tag_name }}
 
 - run: echo "Deploying version ${{ steps.version.outputs.version }}"
+  # outputs.version → v1.3.0
+  # outputs.version-number → 1.3.0
 ```
 
 ## Inputs
@@ -29,7 +31,8 @@ A GitHub Action that extracts and parses semantic versions from tags, refs, or m
 | Output | Description | Example |
 |--------|-------------|---------|
 | `found` | Whether a valid version was found | `true` / `false` |
-| `source` | The raw input string before any processing | `v1.3.0` || `version` | Full version string | `1.3.0` |
+| `source` | The raw input string before any processing | `v1.3.0` || `version` | Full version string with prefix | `v1.3.0` |
+| `version-number` | Version string without prefix | `1.3.0` |
 | `major` | Major version number | `1` |
 | `minor` | Minor version number | `3` |
 | `patch` | Patch version number | `0` |
@@ -56,6 +59,7 @@ jobs:
 
       - run: |
           echo "Version: ${{ steps.version.outputs.version }}"
+          echo "Version Number: ${{ steps.version.outputs.version-number }}"
           echo "Major: ${{ steps.version.outputs.major }}"
 ```
 
@@ -84,7 +88,8 @@ jobs:
   with:
     tag: 'release-2.5.1'
     prefix: 'release-'
-# outputs.version → 2.5.1
+# outputs.version → release-2.5.1
+# outputs.version-number → 2.5.1
 ```
 
 ### Prerelease detection
@@ -109,7 +114,8 @@ Use `extract-pattern` to pull a version out of arbitrary text (e.g. commit messa
   with:
     tag: 'chore: release v1.2.0'
     extract-pattern: 'v?(\d+\.\d+\.\d+)'
-# outputs.version → 1.2.0
+# outputs.version → v1.2.0
+# outputs.version-number → 1.2.0
 ```
 
 ### Soft failure mode

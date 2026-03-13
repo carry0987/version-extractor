@@ -51,14 +51,16 @@ function run(): void {
 
         // --- Set outputs ---
         core.setOutput('found', 'true');
-        core.setOutput('version', parsed.version);
+        core.setOutput('version', `${prefix}${parsed.version}`);
+        core.setOutput('version-number', parsed.version);
         core.setOutput('major', parsed.major.toString());
         core.setOutput('minor', parsed.minor.toString());
         core.setOutput('patch', parsed.patch.toString());
         core.setOutput('prerelease', parsed.prerelease);
         core.setOutput('is-prerelease', parsed.isPrerelease.toString());
 
-        core.info(`Parsed version: ${parsed.version}`);
+        core.info(`Parsed version: ${prefix}${parsed.version}`);
+        core.info(`Version number: ${parsed.version}`);
         core.info(`Components: major=${parsed.major} minor=${parsed.minor} patch=${parsed.patch}`);
         if (parsed.isPrerelease) {
             core.info(`Prerelease: ${parsed.prerelease}`);

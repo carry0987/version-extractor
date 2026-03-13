@@ -17434,13 +17434,15 @@ function run() {
 			return;
 		}
 		setOutput("found", "true");
-		setOutput("version", parsed.version);
+		setOutput("version", `${prefix}${parsed.version}`);
+		setOutput("version-number", parsed.version);
 		setOutput("major", parsed.major.toString());
 		setOutput("minor", parsed.minor.toString());
 		setOutput("patch", parsed.patch.toString());
 		setOutput("prerelease", parsed.prerelease);
 		setOutput("is-prerelease", parsed.isPrerelease.toString());
-		info(`Parsed version: ${parsed.version}`);
+		info(`Parsed version: ${prefix}${parsed.version}`);
+		info(`Version number: ${parsed.version}`);
 		info(`Components: major=${parsed.major} minor=${parsed.minor} patch=${parsed.patch}`);
 		if (parsed.isPrerelease) info(`Prerelease: ${parsed.prerelease}`);
 	} catch (error) {
