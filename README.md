@@ -128,7 +128,7 @@ Set `fail-on-error` to `false` to emit a warning instead of failing the action w
   id: version
   with:
     tag: 'not-a-version'
-    fail-on-error: 'false'
+    fail-on-error: false
 
 - if: steps.version.outputs.found == 'true'
   run: echo "Version ${{ steps.version.outputs.version }}"
@@ -153,7 +153,7 @@ Non-strict mode uses `semver.coerce` as a fallback, accepting partial versions:
 - uses: carry0987/version-extractor@v1
   with:
     tag: '1.3'
-    strict: 'false'
+    strict: false
 # outputs.version → 1.3.0
 ```
 
