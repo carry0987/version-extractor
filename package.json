@@ -15,10 +15,10 @@
     "semver": "^7.7.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.6",
+    "@biomejs/biome": "^2.4.8",
     "@types/node": "^25.5.0",
     "@types/semver": "^7.7.1",
-    "tsdown": "^0.21.2",
+    "tsdown": "^0.21.4",
     "typescript": "^5.9.3",
     "vitest": "^4.1.0"
   }
